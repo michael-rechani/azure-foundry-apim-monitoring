@@ -1,12 +1,11 @@
 # Azure Foundry and APIM Monitoring
 
-Native Azure Monitor Workbooks for understanding Foundry model utilization
-alongside Azure API Management (APIM) traffic. The first workbook connects
-Foundry accounts and PTU deployments to APIM subscriptions.
+Native Azure Monitor Workbooks for understanding Microsoft Foundry model
+utilization alongside Azure API Management (APIM) traffic. The first workbook
+connects Foundry accounts and PTU deployments to APIM subscriptions.
 
-> This workbook is not a billing report or a Microsoft-supported product.
-> Validate the results in your environment before operational or
-> financial use.
+> Subscription PTU figures are estimates, not a billing report. Validate the
+> results in your environment before operational or financial use.
 
 ## Workbook
 

@@ -56,7 +56,8 @@ need Foundry diagnostic logs or a metric-export script.
 
 1. Open
    [`PTU-usage-by-APIM-subscription.workbook.json`](../workbooks/PTU-usage-by-APIM-subscription.workbook.json)
-   in a text editor. Select and copy **all** its contents.
+   on GitHub and select **Copy raw file**, or open it in a text editor and
+   copy **all** its contents.
 2. In the [Azure portal](https://portal.azure.com), open **Monitor** >
    **Workbooks** > **+ New**.
 3. Select **`</>` Advanced editor** and the **Gallery Template** tab. Replace
