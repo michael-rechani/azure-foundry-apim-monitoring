@@ -46,9 +46,6 @@ capacity consumption.
 
 ![Workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
 
-**[Set up the workbook with your Azure resources](docs/setup.md)**, or follow
-the quick start below.
-
 ## Quick start
 
 1. Follow the [setup guide](docs/setup.md) to verify APIM logging, Foundry
@@ -87,3 +84,9 @@ consumption.
   needed.
 - The workbook supports up to five Foundry accounts. Large inventories or long
   time ranges may encounter Azure Monitor query limits.
+
+## Support and license
+
+This is a community sample, not a Microsoft-supported product. Report problems
+or request changes by [opening a GitHub issue](https://github.com/michael-rechani/azure-foundry-apim-monitoring/issues). Released under
+the [MIT License](LICENSE).
