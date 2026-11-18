@@ -22,6 +22,35 @@ Select one or more Foundry accounts, every APIM instance serving them, and a
 deployment to view its subscription breakdown. The combined view summarizes
 the selected deployments.
 
+**[Set up the workbook](docs/setup.md)** to connect your own Foundry accounts
+and APIM logs.
+
+## See it in action
+
+> **Illustrative sample data:** These screenshots show a synthetic 24-hour
+> scenario across two Foundry deployments and three APIM subscriptions, not
+> measured customer usage or a throughput guarantee. Actual results depend on
+> traffic, logging coverage, and deployment history.
+
+### Deployment utilization
+
+Compare provisioned PTU capacity with average and peak utilization, and see
+how utilization changes throughout the day.
+
+![Illustrative workbook showing resource selectors, deployment capacity and utilization, and hourly utilization trends](docs/images/workbook-overview.png)
+
+### PTU allocation by subscription
+
+See each subscription's calls, tokens, and estimated PTU allocation for each
+deployment, followed by combined subscription totals and the allocation trend.
+Estimates use each subscription's share of logged tokens, not directly metered
+capacity consumption.
+
+![Illustrative workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
+
+**[Set up the workbook with your Azure resources](docs/setup.md)**, or follow
+the quick start below.
+
 ## Quick start
 
 1. Follow the [setup guide](docs/setup.md) to verify APIM logging, Foundry
@@ -63,9 +92,9 @@ consumption.
 
 ## Validation
 
-The workbook was exercised in a lab with real APIM traffic across two Foundry
-accounts and two APIM subscriptions. All four account/subscription estimates
-matched independent calculations for a completed hour, and the per-deployment
-and combined table and chart query results matched. This validates that lab
+The workbook was exercised in a test environment with real APIM traffic across
+two Foundry accounts and two APIM subscriptions. All four account/subscription
+estimates matched independent calculations for a completed hour, and the per-deployment
+and combined table and chart query results matched. This validates that test
 scenario, not every customer topology; review the data checks and verify
 results in your environment.
