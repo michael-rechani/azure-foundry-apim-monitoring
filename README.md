@@ -87,12 +87,3 @@ consumption.
   needed.
 - The workbook supports up to five Foundry accounts. Large inventories or long
   time ranges may encounter Azure Monitor query limits.
-
-## Validation
-
-The workbook was exercised in a test environment with real APIM traffic across
-two Foundry accounts and two APIM subscriptions. All four account/subscription
-estimates matched independent calculations for a completed hour, and the per-deployment
-and combined table and chart query results matched. This validates that test
-scenario, not every customer topology; review the data checks and verify
-results in your environment.
