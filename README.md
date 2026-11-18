@@ -4,8 +4,8 @@ Native Azure Monitor Workbooks for understanding Foundry model utilization
 alongside Azure API Management (APIM) traffic. The first workbook connects
 Foundry accounts and PTU deployments to APIM subscriptions.
 
-> This is a sample workbook, not a billing report or a Microsoft-supported
-> product. Validate the results in your environment before operational or
+> This workbook is not a billing report or a Microsoft-supported product.
+> Validate the results in your environment before operational or
 > financial use.
 
 ## Workbook
@@ -27,17 +27,15 @@ and APIM logs.
 
 ## See it in action
 
-> **Illustrative sample data:** These screenshots show a synthetic 24-hour
-> scenario across two Foundry deployments and three APIM subscriptions, not
-> measured customer usage or a throughput guarantee. Actual results depend on
-> traffic, logging coverage, and deployment history.
+*Example data: Screenshots use generated values, not measured customer usage
+or a throughput guarantee.*
 
 ### Deployment utilization
 
 Compare provisioned PTU capacity with average and peak utilization, and see
 how utilization changes throughout the day.
 
-![Illustrative workbook showing resource selectors, deployment capacity and utilization, and hourly utilization trends](docs/images/workbook-overview.png)
+![Workbook showing resource selectors, deployment capacity and utilization, and hourly utilization trends](docs/images/workbook-overview.png)
 
 ### PTU allocation by subscription
 
@@ -46,7 +44,7 @@ deployment, followed by combined subscription totals and the allocation trend.
 Estimates use each subscription's share of logged tokens, not directly metered
 capacity consumption.
 
-![Illustrative workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
+![Workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
 
 **[Set up the workbook with your Azure resources](docs/setup.md)**, or follow
 the quick start below.
