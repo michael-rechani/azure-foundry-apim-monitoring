@@ -84,7 +84,8 @@ deployments. There is no exporter, scheduled job, or custom table to install.
 
 1. Open the saved workbook and select the **Log Analytics workspace** that
    receives the APIM logs and up to five **Foundry account(s)** that host the
-   deployments. Select the accounts, not Foundry projects.
+   deployments. Select the accounts, not Foundry projects. Nothing is selected
+   by default, so pick both before the report loads.
 2. Under **APIM instance(s)**, select every instance that sends traffic to
    those deployments and logs to that workspace.
 3. Choose a **Time range** with at least one completed UTC hour after the
@@ -114,6 +115,13 @@ deployments. There is no exporter, scheduled job, or custom table to install.
   example 24 hours) or use a coarser **Time grain**, then re-run. Very wide
   selections (many deployments over a long range) can exceed the Log Analytics
   result limit.
+- **The Log Analytics workspace or Foundry account list is empty.** Both lists
+  come from Azure Resource Graph and show every workspace and Foundry or Azure
+  OpenAI account you can read, across all subscriptions in your tenant. If a
+  resource is missing, confirm you have at least Reader on it. Newly created
+  resources can take a few minutes to appear. Redeploy the latest template
+  (Deploy to Azure) if you installed an earlier version that used the built-in
+  resource picker, which can show nothing in some tenants.
 
 ## Important when sharing results
 

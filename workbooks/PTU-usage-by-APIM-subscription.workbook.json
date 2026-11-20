@@ -55,38 +55,41 @@
             "version": "KqlParameterItem/1.0",
             "name": "Workspace",
             "label": "Log Analytics workspace",
-            "type": 5,
+            "type": 2,
             "isRequired": true,
             "description": "The workspace containing the APIM diagnostic logs.",
+            "query": "resources\n| where type =~ 'microsoft.operationalinsights/workspaces'\n| join kind=leftouter (resourcecontainers | where type =~ 'microsoft.resources/subscriptions' | project subscriptionId, SubscriptionName = name) on subscriptionId\n| project value = id, label = name, selected = false, group = strcat(SubscriptionName, ' / ', resourceGroup)\n| order by group asc, label asc",
+            "crossComponentResources": [
+              "value::all"
+            ],
             "typeSettings": {
-              "resourceTypeFilter": {
-                "microsoft.operationalinsights/workspaces": true
-              },
-              "additionalResourceOptions": [
-                "value::1"
-              ],
+              "additionalResourceOptions": [],
               "showDefault": false
             },
-            "defaultValue": "value::1"
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           },
           {
-            "id": "c1b034a7-12d0-5702-891c-2b0f971f2843",
+            "id": "9259c7cc-e2e9-5a66-9687-9b6fe75705f4",
             "version": "KqlParameterItem/1.0",
             "name": "Foundry",
             "label": "Foundry account(s)",
-            "type": 5,
+            "type": 2,
             "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
             "description": "Select up to 5 Foundry or Azure OpenAI accounts containing the PTU deployments.",
+            "query": "resources\n| where type =~ 'microsoft.cognitiveservices/accounts' and kind in~ ('AIServices', 'OpenAI')\n| join kind=leftouter (resourcecontainers | where type =~ 'microsoft.resources/subscriptions' | project subscriptionId, SubscriptionName = name) on subscriptionId\n| project value = id, label = name, selected = false, group = strcat(SubscriptionName, ' / ', resourceGroup)\n| order by group asc, label asc",
+            "crossComponentResources": [
+              "value::all"
+            ],
             "typeSettings": {
-              "resourceTypeFilter": {
-                "microsoft.cognitiveservices/accounts": true
-              },
               "additionalResourceOptions": [],
               "showDefault": false
-            }
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ","
           },
           {
             "id": "60c78450-8406-5dc2-9051-007318a6b54a",
