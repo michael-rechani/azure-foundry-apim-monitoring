@@ -54,6 +54,16 @@ need Foundry diagnostic logs or a metric-export script.
 
 ## 3. Import and save the workbook
 
+**Easiest: one click.** Select
+[**Deploy to Azure**](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fmain%2Fdeploy%2Fazuredeploy.json),
+choose a subscription and resource group, then **Review + create > Create**.
+Open it from **Monitor** > **Workbooks**. To get a fix later, run it again with
+the same name and resource group; it updates that workbook in place. If you
+previously imported an older copy by hand, delete that copy so you only have
+one.
+
+**Or paste it manually:**
+
 1. Open
    [`PTU-usage-by-APIM-subscription.workbook.json`](../workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    on GitHub and select **Copy raw file**, or open it in a text editor and
@@ -87,6 +97,23 @@ deployments. There is no exporter, scheduled job, or custom table to install.
 5. Open **Data check** and review any warnings before using the numbers. If
    data is missing, check the selected resources, permissions, APIM logs, and
    metric availability; allow time for new logs and metrics to arrive.
+
+### Troubleshooting
+
+- **Tokens and PTU are blank for an API.** Calls appear but the APIM LLM log has
+  no token usage for them. On that API, open **Settings > Diagnostics logs >
+  Azure Monitor** and turn on **Log LLM messages**. Streaming responses that
+  omit usage also leave tokens blank. The workbook does not allocate PTU for
+  these hours, so other subscriptions are not over-charged.
+- **Rows show `<unmapped>` as the Foundry account.** APIM logged tokens, but the
+  BackendUrl is not `https://<selected account host>/openai/deployments/<name>/...`
+  (for example the `/openai/v1` path, another host, or an account you did not
+  select). Select that account, or check the API's backend URL. Data check steps
+  18 and 19 count these calls.
+- **`E_QUERY_RESULT_SET_TOO_LARGE` (64 MB).** Shorten the **Time range** (for
+  example 24 hours) or use a coarser **Time grain**, then re-run. Very wide
+  selections (many deployments over a long range) can exceed the Log Analytics
+  result limit.
 
 ## Important when sharing results
 

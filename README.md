@@ -49,12 +49,18 @@ capacity consumption.
 
 1. Follow the [setup guide](docs/setup.md) to verify APIM logging, Foundry
    metrics, and access.
-2. Import
+2. Click **Deploy to Azure**, pick a subscription and resource group, and select
+   **Review + create > Create**. This only saves the workbook; it does not touch
+   APIM or Foundry. Running it again updates the same workbook in place.
+
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fmain%2Fdeploy%2Fazuredeploy.json)
+
+   Prefer to paste it yourself? Import
    [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](workbooks/PTU-usage-by-APIM-subscription.workbook.json)
-   into **Azure portal > Monitor > Workbooks > + New > Advanced editor**.
-3. Apply the JSON and save the workbook in a resource group. Select the Log
-   Analytics workspace, Foundry accounts, APIM instances, and time range in the
-   workbook.
+   into **Azure portal > Monitor > Workbooks > + New > Advanced editor**, apply
+   the JSON, and save it in a resource group.
+3. Open the workbook and select the Log Analytics workspace, Foundry accounts,
+   APIM instances, and time range.
 
 The workbook runs natively in Azure Workbooks. There is no customer-side
 script, exporter, scheduler, custom table, or deployment to install. It reads
