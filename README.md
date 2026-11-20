@@ -11,7 +11,8 @@ connects Foundry accounts and PTU deployments to APIM subscriptions.
 
 **PTU usage by APIM subscription** shows:
 
-- Foundry account and deployment behind each APIM subscription
+- Foundry account and deployment behind each APIM subscription, when the
+  backend URL identifies them
 - Calls and tokens observed in APIM logs
 - Provisioned-managed deployment utilization from Azure Monitor metrics
 - Estimated average and peak PTU allocation by subscription, in a table and
@@ -51,7 +52,8 @@ capacity consumption.
    metrics, and access.
 2. Click **Deploy to Azure**, pick a subscription and resource group, and select
    **Review + create > Create**. This only saves the workbook; it does not touch
-   APIM or Foundry. Running it again updates the same workbook in place.
+   APIM or Foundry. Running it again with the same name and resource group
+   updates the workbook in place.
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fmain%2Fdeploy%2Fazuredeploy.json)
 
@@ -79,7 +81,8 @@ consumption.
 
 - Direct, unlogged, or incompletely sampled traffic can distort the
   token-share allocation. Include every APIM instance serving the selected
-  deployments and review the workbook's **Data check** section.
+  deployments and review the workbook's **Data check** section. Unsafe buckets
+  are excluded, so estimates may cover less than the selected time range.
 - Historical capacity and deployment-change completion times cannot be
   reliably reconstructed. Do not rely on estimates around deployment changes
   or deleted deployments without independent verification.
@@ -88,7 +91,8 @@ consumption.
 - APIM subscription IDs may not be customer names; map them separately if
   needed.
 - The workbook supports up to five Foundry accounts. Large inventories or long
-  time ranges may encounter Azure Monitor query limits.
+  time ranges may encounter Azure Monitor query limits; dropdowns are limited
+  to 1,000 items.
 
 ## Support and license
 

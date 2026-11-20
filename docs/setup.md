@@ -59,8 +59,8 @@ need Foundry diagnostic logs or a metric-export script.
 choose a subscription and resource group, then **Review + create > Create**.
 Open it from **Monitor** > **Workbooks**. To get a fix later, run it again with
 the same name and resource group; it updates that workbook in place. If you
-previously imported an older copy by hand, delete that copy so you only have
-one.
+previously imported a copy by hand, that copy remains separate and can be
+updated through its Advanced editor.
 
 **Or paste it manually:**
 
@@ -98,30 +98,39 @@ deployments. There is no exporter, scheduled job, or custom table to install.
 5. Open **Data check** and review any warnings before using the numbers. If
    data is missing, check the selected resources, permissions, APIM logs, and
    metric availability; allow time for new logs and metrics to arrive.
+   The utilization metric can be visible even when APIM traffic is incomplete.
+   Affected buckets are excluded from subscription estimates, so those
+   estimates may cover less than the selected time range.
 
 ### Troubleshooting
 
-- **Tokens and PTU are blank for an API.** Calls appear but the APIM LLM log has
-  no token usage for them. On that API, open **Settings > Diagnostics logs >
-  Azure Monitor** and turn on **Log LLM messages**. Streaming responses that
-  omit usage also leave tokens blank. The workbook does not allocate PTU for
-  these hours, so other subscriptions are not over-charged.
-- **Rows show `<unmapped>` as the Foundry account.** APIM logged tokens, but the
-  BackendUrl is not `https://<selected account host>/openai/deployments/<name>/...`
-  (for example the `/openai/v1` path, another host, or an account you did not
-  select). Select that account, or check the API's backend URL. Data check steps
-  18 and 19 count these calls.
-- **`E_QUERY_RESULT_SET_TOO_LARGE` (64 MB).** Shorten the **Time range** (for
-  example 24 hours) or use a coarser **Time grain**, then re-run. Very wide
-  selections (many deployments over a long range) can exceed the Log Analytics
-  result limit.
+- **Tokens and PTU are blank for an API.** The LLM log or usable token counts
+  may be missing. Check **Settings > Diagnostics logs > Azure Monitor** on
+  that API: enable **Log LLM messages** and confirm 100% sampling. Streaming
+  responses that omit usage can also leave tokens blank. The workbook does not
+  allocate affected buckets; investigate the Data check warnings first.
+- **Rows show `<unmapped>` as the Foundry account.** APIM logged requests, but
+  the BackendUrl did not identify a deployment on a selected account. Examples
+  include the `/openai/v1` path, another host, or an account you did not select.
+  Select that account, or check the API's backend URL. In Data check, review
+  **LLM calls without an identifiable backend deployment**.
+- **`E_QUERY_RESULT_SET_TOO_LARGE` (64 MB) or `Request entity too large`.**
+  Shorten the **Time range** (for example 24 hours), or select fewer accounts,
+  then re-run. A coarser **Time grain** may reduce some intermediate results,
+  but the workbook still retrieves hourly metrics. Large selections can still
+  exceed Azure Monitor query limits.
+- **APIM log rows without correlation IDs.** Check APIM diagnostics and the
+  affected gateway and LLM logs. Without an ID, the workbook cannot reliably
+  join the records, so it leaves affected allocations blank. Unmatched LLM
+  logs can also block adjacent hours because log timestamps may cross a bucket
+  boundary. Only accessible logs can be checked.
 - **The Log Analytics workspace or Foundry account list is empty.** Both lists
-  come from Azure Resource Graph and show every workspace and Foundry or Azure
-  OpenAI account you can read, across all subscriptions in your tenant. If a
-  resource is missing, confirm you have at least Reader on it. Newly created
-  resources can take a few minutes to appear. Redeploy the latest template
-  (Deploy to Azure) if you installed an earlier version that used the built-in
-  resource picker, which can show nothing in some tenants.
+  come from Azure Resource Graph. If a resource is missing, confirm you have at
+  least Reader on it. Newly created resources can take a few minutes to appear.
+  Workbook dropdowns are [limited to 1,000 items](https://learn.microsoft.com/azure/azure-monitor/visualize/workbooks-limits#parameter-limits);
+  larger environments may not show every resource. Redeploy the latest
+  template (Deploy to Azure) if you installed an earlier version that used the
+  built-in resource picker, which can show nothing in some tenants.
 
 ## Important when sharing results
 
@@ -133,6 +142,9 @@ deployments. There is no exporter, scheduled job, or custom table to install.
 - Historical capacity and the completion time of deployment changes are not
   reliably reconstructed. Do not rely on estimates around changes or deleted
   deployments without independent verification.
+- Large dropdowns, grids, and charts have [Azure Workbook limits](https://learn.microsoft.com/azure/azure-monitor/visualize/workbooks-limits).
+  Some subscription series may be grouped as **Other** in a chart; use the table
+  for individual results.
 
 Microsoft references: [APIM gateway logging](https://learn.microsoft.com/azure/api-management/api-management-howto-use-azure-monitor#resource-logs),
 [LLM logging](https://learn.microsoft.com/azure/api-management/api-management-howto-llm-logs),
