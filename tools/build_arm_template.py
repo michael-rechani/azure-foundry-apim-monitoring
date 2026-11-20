@@ -19,7 +19,8 @@ def main():
         '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
         'contentVersion': '1.0.0.0',
         'metadata': {'description': 'Saves the "PTU usage by APIM subscription" workbook in this resource group. '
-                                    'It only creates the Workbook resource; it does not touch APIM or Foundry.'},
+                                    'It only creates or updates the Workbook resource; it does not change APIM, '
+                                    'Azure OpenAI, or Foundry resources.'},
         'parameters': {
             'workbookDisplayName': {
                 'type': 'string',

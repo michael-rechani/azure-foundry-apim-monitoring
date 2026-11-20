@@ -1,19 +1,20 @@
 # Set up the PTU workbook
 
-This workbook shows the Foundry account and deployment behind each APIM
-subscription and estimates that subscription's share of PTU use. **Validate the
-results in your environment before operational or financial use.**
+This workbook shows the Azure OpenAI or Foundry resource and deployment behind
+each APIM subscription and estimates that subscription's share of PTU use.
+**Validate the results in your environment before operational or financial use.**
 
 **You need:** the accompanying
 [`PTU-usage-by-APIM-subscription.workbook.json`](../workbooks/PTU-usage-by-APIM-subscription.workbook.json)
 file, an Azure sign-in, and the names of the APIM instance, Log Analytics
-workspace, and Foundry accounts to view. You select those resources in the
-portal; you do not need to type their resource IDs or run a script.
+workspace, and Azure OpenAI or Foundry resources to view. You select those
+resources in the portal; you do not need to type their resource IDs or run a
+script.
 
 Ask your Azure administrator to confirm that you have:
 
 - **Log Analytics Reader** on the workspace and read access to each APIM
-  instance and Foundry account, including its deployments and metrics.
+  instance and model resource, including its deployments and metrics.
 - Permission to save a workbook in the chosen resource group, such as
   **Monitoring Contributor**. Other viewers need read access to the saved
   workbook and the same underlying data.
@@ -39,12 +40,13 @@ change existing settings without the administrator's approval. If the required
 categories are unavailable, ask the administrator to check APIM support.
 Logs can take time to appear.
 
-## 2. Check the Foundry PTU metric
+## 2. Check the deployment PTU metric
 
 The workbook reads the existing Azure Monitor **metric** directly; it does not
-need Foundry diagnostic logs or a metric-export script.
+need Foundry diagnostic logs or a metric-export script. The deployment must
+expose this metric; do not assume every Foundry model or endpoint supports it.
 
-1. In the Azure portal, open the Foundry / Azure OpenAI **account** that hosts
+1. In the Azure portal, open the Azure OpenAI or Foundry **resource** that hosts
    the PTU deployment. Go to **Monitoring** > **Metrics**.
 2. Select **Provisioned-managed Utilization V2**. Filter or split by
    **ModelDeploymentName** to find the deployment.
@@ -77,22 +79,25 @@ updated through its Advanced editor.
    **Monitor** > **Workbooks**.
 
 Saving creates a workbook resource. The workbook itself only **reads** the
-other resources; it does not create, change, or delete APIM or Foundry
-deployments. There is no exporter, scheduled job, or custom table to install.
+other resources; it does not create, change, or delete APIM, Azure OpenAI, or
+Foundry resources or deployments. There is no exporter, scheduled job, or custom
+table to install.
 
 ## 4. View the results
 
 1. Open the saved workbook and select the **Log Analytics workspace** that
-   receives the APIM logs and up to five **Foundry account(s)** that host the
-   deployments. Select the accounts, not Foundry projects. Nothing is selected
-   by default, so pick both before the report loads.
+   receives the APIM logs and up to five **Azure OpenAI or Foundry resource(s)**
+   that host the deployments. This includes standalone Azure OpenAI resources
+   and Foundry resources. Select the resource, not a Foundry project or a PTU
+   reservation. Nothing is selected by default, so pick both before the
+   report loads.
 2. Under **APIM instance(s)**, select every instance that sends traffic to
    those deployments and logs to that workspace.
 3. Choose a **Time range** with at least one completed UTC hour after the
    deployments finished provisioning or changing. Start with **Time grain** =
    **1 hour** and **Output token weight** = **1**.
 4. Choose a specific account and deployment under **PTU deployment**, or
-   **All deployments (combined)**. The breakdown shows the Foundry account,
+   **All deployments (combined)**. The breakdown shows the model resource,
    deployment, APIM subscription, calls, tokens, and estimated PTU. The chart
    and subscription totals follow the deployment selection.
 5. Open **Data check** and review any warnings before using the numbers. If
@@ -102,6 +107,36 @@ deployments. There is no exporter, scheduled job, or custom table to install.
    Affected buckets are excluded from subscription estimates, so those
    estimates may cover less than the selected time range.
 
+### Validate an existing deployment
+
+Use an existing provisioned deployment and its APIM traffic; you do not need to
+create a new deployment for this check.
+
+1. Select the resource and deployment as described above. Set **Time grain** to
+   **1 hour** and **Output token weight** to **1**. Choose a custom time range
+   covering one completed UTC hour with traffic and no deployment changes.
+2. Review **Data check**. Investigate missing metrics, unmapped backends, and
+   incomplete APIM logs before using the estimate. The historical-capacity
+   warning requires independent confirmation even when other checks pass.
+3. On the deployment's resource, open **Monitoring** > **Metrics**. For the
+   same hour, filter **Provisioned-managed Utilization V2** by
+   **ModelDeploymentName** and use average aggregation. The deployment table's
+   average PTU in use should equal its PTU capacity multiplied by that
+   utilization percentage, divided by 100.
+4. Compare the subscription estimate with the APIM token share for that same
+   deployment and hour: estimated PTU = deployment PTU in use multiplied by
+   the subscription's share of logged tokens. For an independent check, use
+   APIM token totals by subscription for the same deployment and hour if
+   available; a count of requests is not a token share. For example, 100 PTU
+   at 40% utilization and a 25% token share gives an estimated 10 PTU. This is
+   not a direct measurement; verify independently that all relevant traffic
+   is logged.
+
+The APIM backend must identify the selected resource and deployment. Generic
+paths such as `/openai/v1` may not identify a deployment and can show as
+`<unmapped>`. A clean data check cannot detect traffic the workspace never
+received.
+
 ### Troubleshooting
 
 - **Tokens and PTU are blank for an API.** The LLM log or usable token counts
@@ -109,7 +144,7 @@ deployments. There is no exporter, scheduled job, or custom table to install.
   that API: enable **Log LLM messages** and confirm 100% sampling. Streaming
   responses that omit usage can also leave tokens blank. The workbook does not
   allocate affected buckets; investigate the Data check warnings first.
-- **Rows show `<unmapped>` as the Foundry account.** APIM logged requests, but
+- **Rows show `<unmapped>` as the model resource.** APIM logged requests, but
   the BackendUrl did not identify a deployment on a selected account. Examples
   include the `/openai/v1` path, another host, or an account you did not select.
   Select that account, or check the API's backend URL. In Data check, review
@@ -124,7 +159,7 @@ deployments. There is no exporter, scheduled job, or custom table to install.
   join the records, so it leaves affected allocations blank. Unmatched LLM
   logs can also block adjacent hours because log timestamps may cross a bucket
   boundary. Only accessible logs can be checked.
-- **The Log Analytics workspace or Foundry account list is empty.** Both lists
+- **The Log Analytics workspace or model resource list is empty.** Both lists
   come from Azure Resource Graph. If a resource is missing, confirm you have at
   least Reader on it. Newly created resources can take a few minutes to appear.
   Workbook dropdowns are [limited to 1,000 items](https://learn.microsoft.com/azure/azure-monitor/visualize/workbooks-limits#parameter-limits);
