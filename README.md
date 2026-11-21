@@ -17,6 +17,9 @@ first workbook connects model resources and PTU deployments to APIM subscription
 - Provisioned-managed deployment utilization from Azure Monitor metrics
 - Estimated average and peak PTU allocation by subscription, in a table and
   chart
+- PTU-hours for the selected range: used and capacity per deployment, and an
+  estimated total per subscription (average PTU in use x hours). Subscription
+  totals only cover hours that could be safely allocated.
 
 Select one or more Azure OpenAI or Foundry resources, every APIM instance
 serving the deployments, and a deployment to view its subscription breakdown.
