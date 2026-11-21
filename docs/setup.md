@@ -142,13 +142,23 @@ received.
 - **Tokens and PTU are blank for an API.** The LLM log or usable token counts
   may be missing. Check **Settings > Diagnostics logs > Azure Monitor** on
   that API: enable **Log LLM messages** and confirm 100% sampling. Streaming
-  responses that omit usage can also leave tokens blank. The workbook does not
-  allocate affected buckets; investigate the Data check warnings first.
+  responses that omit usage can also leave tokens blank. An hourly bucket is
+  not allocated when more than 5% of its calls have no token usage; with
+  smaller gaps the workbook allocates using the tokens that were logged and
+  shows the number of calls without usage in the **Note** column. Investigate
+  the Data check warnings first.
 - **Rows show `<unmapped>` as the model resource.** APIM logged requests, but
-  the BackendUrl did not identify a deployment on a selected account. Examples
-  include the `/openai/v1` path, another host, or an account you did not select.
-  Select that account, or check the API's backend URL. In Data check, review
-  **LLM calls without an identifiable backend deployment**.
+  neither the BackendUrl nor the APIM LLM log identified a provisioned
+  deployment on a selected account. When the URL has no `/deployments/<name>`
+  path (for example Foundry agent routes), the workbook uses the LLM log
+  `DeploymentName`, or `ModelName` when it matches a deployment name. The
+  account is still taken from the backend host, so select that account.
+  Examples of unmapped traffic include the `/openai/v1` path with no
+  deployment in the LLM log, another host, or an account you did not select. In
+  Data check, review **LLM calls without an identifiable deployment**.
+- **Rows show `<unobserved deployment>`.** The LLM log had a model call
+  without a deployment or matching model name. LLM log rows with no
+  deployment, model, or tokens (for example speech or file APIs) are ignored.
 - **`E_QUERY_RESULT_SET_TOO_LARGE` (64 MB) or `Request entity too large`.**
   Shorten the **Time range** (for example 24 hours), or select fewer accounts,
   then re-run. A coarser **Time grain** may reduce some intermediate results,

@@ -12,7 +12,7 @@ first workbook connects model resources and PTU deployments to APIM subscription
 **PTU usage by APIM subscription** shows:
 
 - Azure OpenAI or Foundry resource and deployment behind each APIM subscription,
-  when the backend URL identifies them
+  when the backend URL or the APIM LLM log (deployment or model name) identifies them
 - Calls and tokens observed in APIM logs
 - Provisioned-managed deployment utilization from Azure Monitor metrics
 - Estimated average and peak PTU allocation by subscription, in a table and
@@ -91,8 +91,14 @@ consumption.
 - The provisioned deployment must expose the Azure Monitor
   **Provisioned-managed Utilization V2** metric. Not every Foundry model or
   endpoint is verified to support this workbook.
-- Backend URLs must identify a selected model resource and deployment.
-  Proxies, custom backends, and rewritten paths may not be identifiable.
+- The backend URL must identify a selected model resource, and either the URL
+  or the APIM LLM log (deployment or model name) must identify the deployment.
+  Foundry agent routes have no deployment in the URL, so they rely on the LLM
+  log. Proxies, custom backends, and rewritten paths may not be identifiable.
+- LLM log rows with no deployment, model, or tokens (for example speech or file
+  APIs) are ignored. If no more than 5% of an hourly bucket's calls lack token
+  usage, the bucket is allocated using the tokens that were logged; above 5% it
+  is not allocated.
 - APIM subscription IDs may not be customer names; map them separately if
   needed.
 - The workbook supports up to five Azure OpenAI or Foundry resources. Large
