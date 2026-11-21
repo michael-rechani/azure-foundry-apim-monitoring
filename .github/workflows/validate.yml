@@ -1,0 +1,40 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Workbook and template are valid JSON
+        run: |
+          python -c "import json; json.load(open('workbooks/PTU-usage-by-APIM-subscription.workbook.json', encoding='utf-8')); json.load(open('deploy/azuredeploy.json', encoding='utf-8'))"
+
+      - name: ARM template matches the workbook
+        run: |
+          cp deploy/azuredeploy.json /tmp/committed.json
+          python tools/build_arm_template.py
+          python - <<'PY'
+          import json, sys
+          a = json.load(open('/tmp/committed.json', encoding='utf-8'))
+          b = json.load(open('deploy/azuredeploy.json', encoding='utf-8'))
+          if a != b:
+              sys.exit('deploy/azuredeploy.json is out of date. Run: python tools/build_arm_template.py')
+          PY
+
+      - name: No unexpected binary or data files
+        run: |
+          bad=$(git ls-files | grep -Ei '\.(png|jpe?g|gif|zip|csv|xlsx|har|log)$' | grep -v '^docs/images/' || true)
+          if [ -n "$bad" ]; then echo "Unexpected files (possible customer data):"; echo "$bad"; exit 1; fi

@@ -105,6 +105,13 @@ consumption.
   inventories or long time ranges may encounter Azure Monitor query limits;
   dropdowns are limited to 1,000 items.
 
+## Data handling
+
+The workbook only reads Azure Monitor metrics and Log Analytics data, and
+needs Reader access. This repository is public: do not commit or post customer
+data, IDs, keys, or screenshots from a real environment. See
+[SECURITY.md](SECURITY.md).
+
 ## Support and license
 
 This is a community sample, not a Microsoft-supported product. Report problems

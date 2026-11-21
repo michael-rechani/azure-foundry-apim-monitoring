@@ -1,0 +1,22 @@
+# Keep customer data out of the repo
+*.log
+*.csv
+*.xlsx
+*.har
+*.zip
+exports/
+scratch/
+tmp/
+
+# Screenshots are allowed only in docs/images
+*.png
+*.jpg
+*.jpeg
+*.gif
+!docs/images/*.png
+
+# Local tooling
+__pycache__/
+*.pyc
+.vscode/
+.idea/
