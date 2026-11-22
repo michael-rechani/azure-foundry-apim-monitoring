@@ -4,7 +4,7 @@
     {
       "type": 1,
       "content": {
-        "json": "## PTU usage by APIM subscription\nSee which APIM subscriptions sent traffic to each PTU deployment and their estimated PTU share. Select a workspace and up to 5 Azure OpenAI or Foundry resources that host the deployments. Select the resource, not a Foundry project or PTU reservation.\n\n**Validation required:** Subscription PTU values are estimates based on logged token share, not measured usage. Token share may differ from actual capacity consumption. Direct or unlogged traffic can affect the split, and capacity history around deployment changes is not verified. Incomplete buckets are excluded, so estimates may cover less than the selected range."
+        "json": "## PTU usage by APIM subscription\n**Workbook version: v1.0.0**\n\nSee which APIM subscriptions sent traffic to each PTU deployment and their estimated PTU share. Select a workspace and up to 5 Azure OpenAI or Foundry resources that host the deployments. Select the resource, not a Foundry project or PTU reservation.\n\n**Validation required:** Subscription PTU values are estimates based on logged token share, not measured usage. Token share may differ from actual capacity consumption. Direct or unlogged traffic can affect the split, and capacity history around deployment changes is not verified. Incomplete buckets are excluded, so estimates may cover less than the selected range."
       },
       "name": "text - intro"
     },

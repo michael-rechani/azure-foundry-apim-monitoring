@@ -29,6 +29,11 @@ that hosts the deployment, not a Foundry project or PTU reservation.
 **[Set up the workbook](docs/setup.md)** to connect your model resources and
 APIM logs.
 
+The workbook displays its version at the top. The current release is
+[v1.0.0](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases/tag/v1.0.0);
+see [releases](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases)
+for other versions. Existing saved workbooks do not update automatically.
+
 ## See it in action
 
 *Example data: Screenshots use generated values, not measured customer usage
@@ -60,10 +65,10 @@ capacity consumption.
    APIM, Azure OpenAI, or Foundry resources. Running it again with the same name
    and resource group updates the workbook in place.
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fmain%2Fdeploy%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.0.0%2Fdeploy%2Fazuredeploy.json)
 
    Prefer to paste it yourself? Import
-   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](workbooks/PTU-usage-by-APIM-subscription.workbook.json)
+   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.0.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    into **Azure portal > Monitor > Workbooks > + New > Advanced editor**, apply
    the JSON, and save it in a resource group.
 3. Open the workbook and select the Log Analytics workspace, Azure OpenAI or
@@ -73,6 +78,15 @@ The workbook runs natively in Azure Workbooks. There is no customer-side
 script, exporter, scheduler, custom table, or deployment to install. It reads
 APIM logs and deployment metrics; saving the workbook creates the Workbook
 resource itself.
+
+## Versioning
+
+Each release is tagged and has a versioned deployment link. To prepare a new
+release, update the workbook's displayed version and the versioned links in
+this README and the setup guide, then run `python tools/build_arm_template.py`
+and tag the resulting commit. Include a deployment link in the release notes.
+Use a newer release's link to update an existing workbook; reusing an older
+release's link deploys that older version.
 
 ## How the estimate works
 
