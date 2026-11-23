@@ -57,18 +57,18 @@ expose this metric; do not assume every Foundry model or endpoint supports it.
 ## 3. Import and save the workbook
 
 **Easiest: one click.** Select
-[**Deploy to Azure (v1.0.0)**](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.0.0%2Fdeploy%2Fazuredeploy.json),
+[**Deploy to Azure (v1.1.0)**](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.0%2Fdeploy%2Fazuredeploy.json),
 choose a subscription and resource group, then **Review + create > Create**.
-Open it from **Monitor** > **Workbooks**. To get a newer release later, use its
-deployment link with the same name and resource group; it updates that workbook
-in place. Reusing the v1.0.0 link deploys v1.0.0 again. If you
-previously imported a copy by hand, that copy remains separate and can be
-updated through its Advanced editor.
+Open it from **Monitor** > **Workbooks**. Each release deploys a new workbook
+named "PTU usage by APIM subscription (vX.Y.Z)", so earlier versions and
+copies you imported by hand are left untouched. Deploying the same version
+again to the same resource group updates that version's copy. To get a newer
+release later, use its deployment link.
 
 **Or paste it manually:**
 
 1. Open
-   [`PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.0.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
+   [`PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    on GitHub and select **Copy raw file**, or open it in a text editor and
    copy **all** its contents.
 2. In the [Azure portal](https://portal.azure.com), open **Monitor** >
@@ -107,6 +107,32 @@ table to install.
    The utilization metric can be visible even when APIM traffic is incomplete.
    Affected buckets are excluded from subscription estimates, so those
    estimates may cover less than the selected time range.
+
+### Peak per-minute PTU and billed PTUs
+
+- **Peak per-minute PTU (est.)** is the highest estimated PTU for the
+  subscription in any single minute. Each minute's measured deployment
+  utilization (1-minute maximum of Provisioned-managed Utilization V2 x PTU
+  capacity) is split by that minute's share of logged tokens. It is not an
+  average, total, or hourly figure. **Peak hourly PTU (est.)** is the older
+  hourly-grain peak and is kept for comparison.
+- In **Billed PTUs per APIM subscription**, enter comma-separated `subscription=PTUs` pairs (for example
+  `GA=50, acme=100`). The name is the APIM subscription
+  name shown in the table. The comparison shows peak % of billed, minutes over
+  billed, headroom (billed - peak), and a status: **Over** when the peak
+  exceeds billed, **OK** when it is at least the **'Under' below** % of
+  billed (default 50), **Under** otherwise, and **n/a** when data is missing.
+  Unavailable values show `n/a`, never 0.
+- The per-minute view covers the last **Per-minute window (hours)** of the
+  selected range (default 24 hours) to stay within query-size limits. To widen
+  it, increase that value gradually and shorten the **Time range** or select
+  fewer accounts if you see a query-size error.
+- To spot-check, open the account's **Monitoring** > **Metrics**, choose
+  **Provisioned-managed Utilization V2**, set the time granularity to 1
+  minute, aggregation Max, and filter by **ModelDeploymentName**. The
+  deployment's highest minute x its PTU capacity / 100 should match the
+  workbook's deployment-level per-minute PTU. Per-subscription values remain
+  estimates and are not verified against any external report.
 
 ### Validate an existing deployment
 
