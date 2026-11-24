@@ -21,6 +21,18 @@ first workbook connects model resources and PTU deployments to APIM subscription
   estimated total per subscription (average PTU in use x hours). Subscription
   totals only cover hours that could be safely allocated.
 
+- Peak per-minute PTU per subscription (estimated): the highest estimated PTU
+  in any single minute of the selected range, with the hourly peak kept as a
+  separate, relabeled column.
+- Who uses each PTU deployment: for a shared deployment, each subscription's
+  share of PTU use, average and peak per-minute PTU, and peak as a % of the
+  deployment, next to the measured deployment total, plus a stacked per-minute
+  chart that shows unused capacity.
+- Billed-PTU comparison: enter a default purchased PTU amount for every client
+  (and optional `name=PTUs` overrides) to see peak % of billed, minutes and %
+  of minutes over billed, headroom, and an Under / OK / Over status, plus a
+  per-minute chart with billed PTUs as a reference line.
+
 Select one or more Azure OpenAI or Foundry resources, every APIM instance
 serving the deployments, and a deployment to view its subscription breakdown.
 The combined view summarizes the selected deployments. Select the resource
@@ -30,7 +42,7 @@ that hosts the deployment, not a Foundry project or PTU reservation.
 APIM logs.
 
 The workbook displays its version at the top. The current release is
-[v1.0.0](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases/tag/v1.0.0);
+[v1.1.0](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases/tag/v1.1.0);
 see [releases](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases)
 for other versions. Existing saved workbooks do not update automatically.
 
@@ -56,19 +68,37 @@ capacity consumption.
 
 ![Workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
 
+### Billed PTUs vs peak per-minute PTU
+
+New in v1.1.0: a "who uses the deployment" view (share, average and peak
+per-minute PTU per subscription, stacked per-minute chart with unused capacity)
+and a comparison of each subscription's peak per-minute PTU with the PTUs it
+bought. Because clients share one deployment, "Over" means a client's estimated
+use exceeded what it purchased, not that the deployment ran out of capacity.
+This image is an
+**illustrative mock-up** with generated values; it was not rendered from the
+workbook. The two screenshots above predate v1.1.0 and do not show the new
+columns.
+
+![Illustrative mock-up of the per-subscription share of a shared PTU deployment, with a stacked per-minute chart and unused capacity](docs/images/workbook-who-uses-deployment-mockup.png)
+
+![Illustrative mock-up of the billed-PTU comparison table and per-minute chart](docs/images/workbook-billed-comparison-mockup.png)
+
 ## Quick start
 
 1. Follow the [setup guide](docs/setup.md) to verify APIM logging, deployment
    metrics, and access.
 2. Click **Deploy to Azure**, pick a subscription and resource group, and select
    **Review + create > Create**. This only saves the workbook; it does not touch
-   APIM, Azure OpenAI, or Foundry resources. Running it again with the same name
-   and resource group updates the workbook in place.
+   APIM, Azure OpenAI, or Foundry resources. Each release deploys a new workbook
+   named "PTU usage by APIM subscription (vX.Y.Z)", so your existing copies are
+   not overwritten. Deploying the same version again to the same resource group
+   updates that version's copy.
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.0.0%2Fdeploy%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.0%2Fdeploy%2Fazuredeploy.json)
 
    Prefer to paste it yourself? Import
-   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.0.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
+   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    into **Azure portal > Monitor > Workbooks > + New > Advanced editor**, apply
    the JSON, and save it in a resource group.
 3. Open the workbook and select the Log Analytics workspace, Azure OpenAI or
@@ -85,8 +115,8 @@ Each release is tagged and has a versioned deployment link. To prepare a new
 release, update the workbook's displayed version and the versioned links in
 this README and the setup guide, then run `python tools/build_arm_template.py`
 and tag the resulting commit. Include a deployment link in the release notes.
-Use a newer release's link to update an existing workbook; reusing an older
-release's link deploys that older version.
+Each release's link creates its own workbook named with that version, so a
+newer release does not overwrite an older copy.
 
 ## How the estimate works
 
@@ -118,6 +148,20 @@ consumption.
   is not allocated.
 - APIM subscription IDs may not be customer names; map them separately if
   needed.
+- Per-subscription PTUs are estimates: the deployment's measured utilization
+  is split by token share, and token share is not the same as capacity use.
+  The per-minute peak uses 1-minute utilization and APIM log timestamps (logged
+  at request completion), so long or streaming calls can land in a neighboring
+  minute. Minutes with utilization but no logged tokens appear under
+  `<unattributed>`. The per-minute peak can be below the hourly peak when the
+  per-minute window is shorter than the time range or token shares differ
+  between the hour and its minutes; the Note column says so.
+- The per-minute view covers the last **Per-minute window (hours)** (default
+  24) of the time range, to stay within query-size limits. Widen it
+  cautiously. The billed-PTU comparison uses one purchased value per
+  subscription (a default plus optional overrides), summed across the selected deployments, and the Under/OK/Over
+  thresholds are a convention (OK at or above the **'Under' below** % of
+  billed), not a billing rule.
 - The workbook supports up to five Azure OpenAI or Foundry resources. Large
   inventories or long time ranges may encounter Azure Monitor query limits;
   dropdowns are limited to 1,000 items.
