@@ -48,25 +48,8 @@ for other versions. Existing saved workbooks do not update automatically.
 
 ## See it in action
 
-*Example data: Screenshots use generated values, not measured customer usage
-or a throughput guarantee. They show earlier Foundry-only labels; the picker
-now says "Azure OpenAI or Foundry resource(s)".*
-
-### Deployment utilization
-
-Compare provisioned PTU capacity with average and peak utilization, and see
-how utilization changes throughout the day.
-
-![Workbook showing resource selectors, deployment capacity and utilization, and hourly utilization trends](docs/images/workbook-overview.png)
-
-### PTU allocation by subscription
-
-See each subscription's calls, tokens, and estimated PTU allocation for each
-deployment, followed by combined subscription totals and the allocation trend.
-Estimates use each subscription's share of logged tokens, not directly metered
-capacity consumption.
-
-![Workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
+*Example data: These images are illustrative mock-ups with generated values, not
+rendered from the workbook or from real usage, and not a throughput guarantee.*
 
 ### Who is using each PTU deployment
 
@@ -85,10 +68,6 @@ clients share one deployment, "Over" means a client's estimated use exceeded
 what it purchased, not that the deployment ran out of capacity.
 
 ![Illustrative mock-up of the billed-PTU comparison table and per-minute chart](docs/images/workbook-billed-comparison-mockup.png)
-
-*The two v1.1.0 images are **illustrative mock-ups** with generated values, not
-rendered from the workbook or from real usage. The two screenshots above predate
-v1.1.0 and do not show the new views.*
 
 ## Quick start
 
