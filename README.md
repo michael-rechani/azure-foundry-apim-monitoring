@@ -68,21 +68,27 @@ capacity consumption.
 
 ![Workbook showing per-deployment subscription breakdowns, combined totals, and estimated PTU allocation over time](docs/images/workbook-allocation.png)
 
-### Billed PTUs vs peak per-minute PTU
+### Who is using each PTU deployment
 
-New in v1.1.0: a "who uses the deployment" view (share, average and peak
-per-minute PTU per subscription, stacked per-minute chart with unused capacity)
-and a comparison of each subscription's peak per-minute PTU with the PTUs it
-bought. Because clients share one deployment, "Over" means a client's estimated
-use exceeded what it purchased, not that the deployment ran out of capacity.
-This image is an
-**illustrative mock-up** with generated values; it was not rendered from the
-workbook. The two screenshots above predate v1.1.0 and do not show the new
-columns.
+New in v1.1.0. When clients share one PTU deployment, see each subscription's
+share of PTU use, average and peak per-minute PTU, and peak as a % of the
+deployment, next to the measured deployment total. The chart stacks each
+subscription's estimated PTUs per minute, and unused capacity fills the rest.
 
 ![Illustrative mock-up of the per-subscription share of a shared PTU deployment, with a stacked per-minute chart and unused capacity](docs/images/workbook-who-uses-deployment-mockup.png)
 
+### Billed PTUs vs peak per-minute PTU
+
+New in v1.1.0. Enter the PTUs each client bought (one default, plus optional
+overrides) to compare it with that client's peak per-minute PTU. Because
+clients share one deployment, "Over" means a client's estimated use exceeded
+what it purchased, not that the deployment ran out of capacity.
+
 ![Illustrative mock-up of the billed-PTU comparison table and per-minute chart](docs/images/workbook-billed-comparison-mockup.png)
+
+*The two v1.1.0 images are **illustrative mock-ups** with generated values, not
+rendered from the workbook or from real usage. The two screenshots above predate
+v1.1.0 and do not show the new views.*
 
 ## Quick start
 
