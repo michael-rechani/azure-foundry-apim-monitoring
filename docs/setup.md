@@ -116,10 +116,19 @@ table to install.
   capacity) is split by that minute's share of logged tokens. It is not an
   average, total, or hourly figure. **Peak hourly PTU (est.)** is the older
   hourly-grain peak and is kept for comparison.
-- In **Billed PTUs per APIM subscription**, enter comma-separated `subscription=PTUs` pairs (for example
-  `GA=50, acme=100`). The name is the APIM subscription
-  name shown in the table. The comparison shows peak % of billed, minutes over
-  billed, headroom (billed - peak), and a status: **Over** when the peak
+- **Section 3** shows who uses the PTU deployment selected in section 2. The
+  first row is the measured deployment total. The other rows are estimates per
+  subscription: share of PTU use, average PTU, peak per-minute PTU, and peak as
+  a % of the deployment's PTUs. The chart stacks each subscription's estimated
+  PTUs per minute, and **Unused capacity** fills the rest, so the top of the
+  stack equals the deployment's PTUs. It follows the **PTU deployment**
+  selection.
+- In **Default billed PTUs (every client)**, enter the PTUs each client
+  purchased (for example `50`). Use **Billed PTU overrides per APIM
+  subscription** for exceptions, as comma-separated `subscription=PTUs` pairs
+  (for example `GA=100, acme=25`). The name is the APIM subscription
+  name shown in the table. The comparison (section 4) shows peak % of billed,
+  minutes and % of minutes over billed, headroom (billed - peak), and a status: **Over** when the peak
   exceeds billed, **OK** when it is at least the **'Under' below** % of
   billed (default 50), **Under** otherwise, and **n/a** when data is missing.
   Unavailable values show `n/a`, never 0.

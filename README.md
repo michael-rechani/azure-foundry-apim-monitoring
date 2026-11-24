@@ -24,10 +24,14 @@ first workbook connects model resources and PTU deployments to APIM subscription
 - Peak per-minute PTU per subscription (estimated): the highest estimated PTU
   in any single minute of the selected range, with the hourly peak kept as a
   separate, relabeled column.
-- Billed-PTU comparison: enter each subscription's purchased PTUs
-  (`name=PTUs`) to see peak % of billed, minutes over billed, headroom, and an
-  Under / OK / Over status, plus a per-minute chart with billed PTUs as a
-  reference line.
+- Who uses each PTU deployment: for a shared deployment, each subscription's
+  share of PTU use, average and peak per-minute PTU, and peak as a % of the
+  deployment, next to the measured deployment total, plus a stacked per-minute
+  chart that shows unused capacity.
+- Billed-PTU comparison: enter a default purchased PTU amount for every client
+  (and optional `name=PTUs` overrides) to see peak % of billed, minutes and %
+  of minutes over billed, headroom, and an Under / OK / Over status, plus a
+  per-minute chart with billed PTUs as a reference line.
 
 Select one or more Azure OpenAI or Foundry resources, every APIM instance
 serving the deployments, and a deployment to view its subscription breakdown.
@@ -66,11 +70,17 @@ capacity consumption.
 
 ### Billed PTUs vs peak per-minute PTU
 
-New in v1.1.0: compare each subscription's peak per-minute PTU with the PTUs it
-bought, and chart per-minute PTU against billed PTUs. This image is an
+New in v1.1.0: a "who uses the deployment" view (share, average and peak
+per-minute PTU per subscription, stacked per-minute chart with unused capacity)
+and a comparison of each subscription's peak per-minute PTU with the PTUs it
+bought. Because clients share one deployment, "Over" means a client's estimated
+use exceeded what it purchased, not that the deployment ran out of capacity.
+This image is an
 **illustrative mock-up** with generated values; it was not rendered from the
 workbook. The two screenshots above predate v1.1.0 and do not show the new
 columns.
+
+![Illustrative mock-up of the per-subscription share of a shared PTU deployment, with a stacked per-minute chart and unused capacity](docs/images/workbook-who-uses-deployment-mockup.png)
 
 ![Illustrative mock-up of the billed-PTU comparison table and per-minute chart](docs/images/workbook-billed-comparison-mockup.png)
 
@@ -149,7 +159,7 @@ consumption.
 - The per-minute view covers the last **Per-minute window (hours)** (default
   24) of the time range, to stay within query-size limits. Widen it
   cautiously. The billed-PTU comparison uses one purchased value per
-  subscription, summed across the selected deployments, and the Under/OK/Over
+  subscription (a default plus optional overrides), summed across the selected deployments, and the Under/OK/Over
   thresholds are a convention (OK at or above the **'Under' below** % of
   billed), not a billing rule.
 - The workbook supports up to five Azure OpenAI or Foundry resources. Large
