@@ -57,7 +57,7 @@ expose this metric; do not assume every Foundry model or endpoint supports it.
 ## 3. Import and save the workbook
 
 **Easiest: one click.** Select
-[**Deploy to Azure (v1.1.0)**](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.0%2Fdeploy%2Fazuredeploy.json),
+[**Deploy to Azure (v1.1.1)**](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.1%2Fdeploy%2Fazuredeploy.json),
 choose a subscription and resource group, then **Review + create > Create**.
 Open it from **Monitor** > **Workbooks**. Each release deploys a new workbook
 named "PTU usage by APIM subscription (vX.Y.Z)", so earlier versions and
@@ -68,7 +68,7 @@ release later, use its deployment link.
 **Or paste it manually:**
 
 1. Open
-   [`PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
+   [`PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.1/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    on GitHub and select **Copy raw file**, or open it in a text editor and
    copy **all** its contents.
 2. In the [Azure portal](https://portal.azure.com), open **Monitor** >
