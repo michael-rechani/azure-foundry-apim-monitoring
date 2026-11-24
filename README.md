@@ -42,7 +42,7 @@ that hosts the deployment, not a Foundry project or PTU reservation.
 APIM logs.
 
 The workbook displays its version at the top. The current release is
-[v1.1.0](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases/tag/v1.1.0);
+[v1.1.1](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases/tag/v1.1.1);
 see [releases](https://github.com/michael-rechani/azure-foundry-apim-monitoring/releases)
 for other versions. Existing saved workbooks do not update automatically.
 
@@ -80,10 +80,10 @@ what it purchased, not that the deployment ran out of capacity.
    not overwritten. Deploying the same version again to the same resource group
    updates that version's copy.
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.0%2Fdeploy%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmichael-rechani%2Fazure-foundry-apim-monitoring%2Fv1.1.1%2Fdeploy%2Fazuredeploy.json)
 
    Prefer to paste it yourself? Import
-   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.0/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
+   [`workbooks/PTU-usage-by-APIM-subscription.workbook.json`](https://github.com/michael-rechani/azure-foundry-apim-monitoring/blob/v1.1.1/workbooks/PTU-usage-by-APIM-subscription.workbook.json)
    into **Azure portal > Monitor > Workbooks > + New > Advanced editor**, apply
    the JSON, and save it in a resource group.
 3. Open the workbook and select the Log Analytics workspace, Azure OpenAI or
